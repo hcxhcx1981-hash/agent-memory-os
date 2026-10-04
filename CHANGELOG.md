@@ -1,5 +1,12 @@
 # Changelog
 
+## RC preparation (version unchanged pending acceptance)
+
+Release security history review and offline checker; Apache-2.0 LICENSE/NOTICE
+and dependency review; portable installation and Hermes/generic adapter guides;
+fictional executable Quick Start/demo; offline Python 3.11–3.14 CI; isolated
+packaging checks. No new Core capability or schema changes. No publication.
+
 ## 0.2.0
 
 Optional deterministic Semantic Judge, observed/candidate lifecycle with confirmed promotion, lossless consolidation with retained source relationships, scoped weighted retrieval, explain/why CLI. Hermes router uses smart layer while preserving V0.1.1 syntax. Core schema unchanged; independent smart_state.v1 and memory_relationship.v1 contracts. No runtime dependencies added.

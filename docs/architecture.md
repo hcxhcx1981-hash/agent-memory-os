@@ -13,3 +13,16 @@ ACTIVE 是默认唯一可注入状态。机器是记录范围的一部分，用�
 ## V0.2 optional architecture
 
 `smart/layer.py` implements the four optional modules and wraps public Core operations. CLI smart commands activate it; old commands remain deterministic V0.1. Observations and relationships live in `<store>.smart.json`, independent of immutable memory_record.v1 semantics. Detailed factors and safety boundaries: [Smart Layer](smart-layer.md).
+
+Promotion uses repeat/time/source/stability evidence only to recommend a change;
+trusted explicit confirmation and the Core Gate authorize the final write.
+Consolidation joins compatible source clauses without deletion, records all source
+IDs/revisions and checks them before promotion and derived recall. Weighted
+retrieval is optional: project/agent/machine/type/lifecycle filters apply before
+scoring, and bounded injection avoids aggregate/source repetition. Neither layer
+requires an LLM. This is a governed fact store, not a chat-history database.
+
+Adapters provide the confirmation boundary and choose when the current task needs
+history. They may use the [public contract](build-an-adapter.md), but must not edit
+the store directly. The [Hermes Skill Router](hermes-quickstart.md) is a model-mediated
+reference integration, not a Core dependency or mandatory host Hook.

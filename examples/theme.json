@@ -1,0 +1,8 @@
+{
+  "content": "default_theme=graphite-purple",
+  "confirmed": true,
+  "source_type": "user",
+  "type": "PROJECT",
+  "project": "Project-Mercury",
+  "metadata": {"fact_key": "default_theme"}
+}

@@ -7,7 +7,7 @@ description: External Memory OS for explicit long-term project facts and cross-s
 Use terminal ONLY when the user explicitly states a durable project fact, asks for a historical project fact, or confirms replacement. Do not query on arithmetic or unrelated tasks. Never save all messages. Never use Hermes native memory tool or edit its files for these facts.
 
 Public router command (Windows terminal):
-python D:/fictional/agent-memory-os/adapters/hermes/router.py ACTION --project PROJECT --key default_theme
+<MEMORY_OS_PYTHON> "<AGENT_MEMORY_OS_ROOT>/adapters/hermes/router.py" ACTION --project PROJECT --key default_theme
 
 WRITE: A user's direct assertion such as "以后测试项目 Project-Mercury 的默认主题是 graphite-purple" is confirmation of that exact fact. Execute write with --value graphite-purple --user-confirmed. Do not treat model guesses as confirmed. Router performs evaluate then add only on ACCEPT. Return ID and decision.
 
@@ -33,7 +33,7 @@ OBSERVED is not ACTIVE and must not enter task context. If PROMOTION_RECOMMENDED
 
 Interpret MEMORY_DECISION literally: REJECT means not saved as OBSERVED; OBSERVATION_ID can identify a redacted rejection, not a saved fact. Explain MEMORY_REASON and do not recommend promoting a rejected ID. OBSERVED means observation only, not ACTIVE. Use PROMOTION_EVIDENCE for why a recommendation appeared; recommendation never authorizes promotion.
 
-For consolidation use the public CLI: python -m cli --store D:/fictional/agent-memory-os/storage/hermes-memory.json consolidate SOURCE_ID... from the project directory. Obtain relevant IDs through the public router read or CLI smart-retrieve, never raw storage access. It produces only a CANDIDATE. Explain source IDs and unchanged clauses, then wait for separate explicit human approval before promote. explain/why public CLI provides reasons; failure must be reported as blocked, never claimed as accepted.
+For consolidation use the public CLI: <MEMORY_OS_PYTHON> -m cli --store "<AGENT_MEMORY_OS_ROOT>/storage/hermes-memory.json" consolidate SOURCE_ID... from the project directory. Obtain relevant IDs through the public router read or CLI smart-retrieve, never raw storage access. It produces only a CANDIDATE. Explain source IDs and unchanged clauses, then wait for separate explicit human approval before promote. explain/why public CLI provides reasons; failure must be reported as blocked, never claimed as accepted.
 
 
 For report/style recall use read --project Project-Aurora --task "报告". For UI rules use --task "UI". Do not invent report_style or other translated fact keys that were never stored. --key is only for facts actually stored as key=value (e.g. default_theme). An empty lexical result means no match for that query, not proof the project has no ACTIVE facts. Do not automatically retry a rejected write as observe; report the fixed reason and stop.
@@ -42,4 +42,4 @@ For explicitly authorized E2E fixtures, a user-defined specification of a named 
 
 A consolidation candidate containing contradictory color values is a failed gate, not a successful negative test. BLOCKED is a refusal; explain the fixed error reason and stop. Never promote a contradictory candidate or claim that confirmed=false makes contradictory consolidation acceptable. Use explain on the relevant observation/Core IDs for audit evidence; do not invent fields such as promoted_to.
 
-For EVERY direct CLI operation (including get, explain, retire and promote), select the independent store before the command: python -m cli --store D:/fictional/agent-memory-os/storage/hermes-memory.json COMMAND ARGS. Without --store the CLI uses a different default store. A missing ID in that default store is not a schema failure. Never infer lifecycle state from a failed lookup in the wrong store.
+For EVERY direct CLI operation (including get, explain, retire and promote), select the independent store before the command: <MEMORY_OS_PYTHON> -m cli --store "<AGENT_MEMORY_OS_ROOT>/storage/hermes-memory.json" COMMAND ARGS. Without --store the CLI uses a different default store. A missing ID in that default store is not a schema failure. Never infer lifecycle state from a failed lookup in the wrong store.

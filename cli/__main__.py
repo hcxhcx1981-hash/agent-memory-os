@@ -4,7 +4,7 @@ from core.engine import Memory
 def main():
     if hasattr(sys.stdout, "reconfigure"): sys.stdout.reconfigure(encoding="utf-8")
     if hasattr(sys.stderr, "reconfigure"): sys.stderr.reconfigure(encoding="utf-8")
-    p=argparse.ArgumentParser(description='Agent Memory OS V0.2 (optional smart layer)')
+    p=argparse.ArgumentParser(description='Agent Memory OS (optional smart layer)')
     p.add_argument('--store',default='storage/memory.json')
     sub=p.add_subparsers(dest='command',required=True)
     for name in ('add','evaluate'):

@@ -6,8 +6,25 @@ build-backend = "setuptools.build_meta"
 name = "agent-memory-os"
 version = "0.2.0"
 description = "Deterministic agent-neutral memory governance"
+readme = "README.md"
+license = {file = "LICENSE"}
 requires-python = ">=3.11"
 dependencies = []
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Operating System :: OS Independent",
+]
+
+[project.urls]
+Repository = "https://github.com/hcxhcx1981-hash/agent-memory-os"
+
+[tool.setuptools]
+license-files = ["LICENSE", "NOTICE"]
 
 [project.scripts]
 memory = "cli.__main__:main"

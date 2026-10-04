@@ -1,0 +1,6 @@
+Agent Memory OS
+Copyright 2026 Agent Memory OS contributors
+
+Original project code is licensed under Apache-2.0.
+No Python interpreter, setuptools distribution, GitHub Action code,
+or Hermes source code is bundled in this package.
