@@ -1,4 +1,4 @@
-# Agent Memory OS V0.1
+# Agent Memory OS V0.2
 
 Agent-neutral、无需模型的长期记忆治理基础设施。Hermes 是第一个 reference adapter；Core 不依赖任何 Agent 或收费 API。
 
@@ -78,3 +78,25 @@ Hermes 安装、调用和卸载见 [Hermes README](adapters/hermes/README.md)。
 详见 [架构](docs/architecture.md)、[生命周期](docs/memory-lifecycle.md)、[冻结 Schema](schemas/memory_record.v1.json)。
 
 V0.1 是单用户、单写入进程的本地工具；无并发写锁、数据库、向量、LLM、云同步或 Web UI。敏感检测是保守启发式，不是 DLP；不要输入真实凭据或精确隐私。近似匹配和分类可能误判，关键规则应明确 type / fact_key；相关性不是语义搜索。JSON 使用临时文件加原子替换，但没有备份恢复或跨文件事务。真实 Hermes 环境未安装、未修改；交付的是通过公共 CLI 验证的 reference adapter。
+
+
+## V0.2 Optional Smart Layer
+
+旧 Core、CLI 和 memory_record.v1 保持兼容。四个新模块：Semantic Judge、Promotion Gate、Memory Consolidation、Context-aware Retrieval。所有永久写入仍通过正式 Core Gate；无商业 API、向量或模型依赖。详见 [智能层与兼容说明](docs/smart-layer.md)、[路线](docs/roadmap.md)。
+
+```powershell
+cd D:\fictional\agent-memory-os
+python -m cli judge --candidate examples/preference.json
+python -m cli observe --candidate examples/preference.json
+python -m cli promotion-candidates
+python -m cli promote OBSERVATION_ID --user-confirmed
+python -m cli consolidate SOURCE_ID_1 SOURCE_ID_2
+python -m cli explain OBSERVATION_OR_MEMORY_ID
+python -m cli smart-retrieve "修复 Win10 Hermes Memory OS Adapter" --project agent-memory-os --agent hermes --machine Win10
+python -m cli smart-inject "修复 Win10 Hermes Memory OS Adapter" --project agent-memory-os --agent hermes --machine Win10 --budget 500
+python -m cli why "帮我分析今天 A 股"
+```
+
+observe 不带确认只观察。用户已明确长期确认时，候选 confirmed=true 且 observe 加 `--user-confirmed` 才能直接晋升；repeat_count 只能推荐。归纳保留每个来源正文，用户确认后生成新记录，原记录保留。`<store>.smart.json` 仅为观察和关系 sidecar，不改变 Core schema。
+
+Hermes `chat-memory.bat` 继续兼容，write 使用 Judge→Promotion→Core Gate，read 改用 weighted retrieval / injection；冲突仍先停下，下一次明确确认才 supersede。专用 Skill 路由仍由模型执行，未变成强制 Hook。Context scope、隐含矛盾、字符预算、无跨文件事务等限制见智能层文档。

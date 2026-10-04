@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "memory_relationship.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "target_id",
+    "derived_from",
+    "consolidates",
+    "source_disposition",
+    "created_at",
+    "source_revisions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "memory_relationship.v1"
+    },
+    "id": {
+      "type": "string"
+    },
+    "target_id": {
+      "type": "string"
+    },
+    "derived_from": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "consolidates": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_disposition": {
+      "const": "retained"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_revisions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      }
+    }
+  }
+}

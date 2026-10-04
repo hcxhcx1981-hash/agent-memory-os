@@ -9,3 +9,7 @@ ACCEPT → ACTIVE；精确/近似重复 → DUPLICATE（不新增）；同一 fa
 REJECTED 是 schema 支持状态，但拒绝候选只落固定原因的审计事件，避免存储敏感正文。evaluate 无副作用，add 再次评价，不能靠先前结果绕过 Gate。无静默覆盖、无自动 supersede。
 
 生命周期结束的记录保留供 get/export 审计，不进入默认 retrieval 或 injection。
+
+## V0.2 observed/candidate lifecycle
+
+Selected preference → OBSERVED; consolidation proposal → CANDIDATE; explicit trusted user confirmation → original Gate → ACTIVE Core record. Repetition only recommends PROMOTE. Inference/sensitive input → redacted REJECTED observation, no original content. Temporary observations expire by TTL and cannot promote permanently. After promotion, Core SUPERSEDED/RETIRED/EXPIRED remains authoritative; smart explain reflects it. Source relationships are retained and revalidated before derived recall. See [Smart Layer](smart-layer.md).

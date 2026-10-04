@@ -29,3 +29,7 @@ remember 只通过 CLI evaluate → add，其他 decision 返回调用方处理�
 Router 使用公共 CLI evaluate/add/retrieve/inject/supersede，独立数据为项目内 `storage/hermes-memory.json`。明确用户事实才确认写入，冲突须下一轮明确确认替换。模型推测不能作为用户确认。路由是 Skill 指令，不是强制 Hook；只承诺验收覆盖的用法。
 
 最小事件证据在 `storage/hermes-router-events.jsonl`，仅时间、动作、ID、decision，不保存聊天或注入正文。运行数据已被 Git 忽略。卸载时用户可移除自己安装的独立 Skill；不用删除或迁移原生 Memory。
+
+## V0.2 smart route
+
+Existing write/read/supersede remain supported. write invokes Semantic Judge and the promotion/Core Gate path; read uses context-aware retrieval/injection. New observe --text stages a selected single preference; only after user confirmation may promote --id OBSERVATION_ID --user-confirmed write ACTIVE. --text supports raw factual assertions, --task and --machine provide retrieval scope. No per-message blanket queries or storage. Installed dedicated Skill is updated from ROUTER_SKILL.md; native Memory and other Skills remain untouched. Offline subprocess regression covers the entire original write/read/conflict/supersede chain; live host regression and IDs are in docs/hermes-v02-regression.md.

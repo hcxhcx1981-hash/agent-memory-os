@@ -9,3 +9,7 @@
 7. Adapter 负责串行化写操作、候选文件隐私和清理、明确的项目边界，以及展示冲突供用户决定。调用 get/export 可查看历史，不能把历史状态重新当成有效规则。
 
 Hermes reference adapter 展示 subprocess CLI 方式。其他 Agent 可实现相同命令协议，无需依赖 Hermes 或模型 SDK。
+
+## Optional smart protocol v0.2
+
+Use judge/observe for selected facts; do not call observe on every message. Only pass --user-confirmed when the human explicitly confirmed that exact durable fact. promotion-candidates is advisory; promote always requires separate user confirmation for observed preferences. consolidate produces a source-linked candidate, never a silent rewrite. smart-retrieve/smart-inject require task and known project/agent/machine scopes; why explains selected/excluded factors, explain supports staged and Core IDs. A model-provided confirmed flag has no independent authority. V1 commands and record schema remain compatible. Rejected raw data must not be retained.
