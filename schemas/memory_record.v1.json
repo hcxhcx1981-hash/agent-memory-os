@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "memory_record.v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "id",
+    "type",
+    "status",
+    "title",
+    "content",
+    "summary",
+    "source_type",
+    "created_at",
+    "updated_at",
+    "project",
+    "machine",
+    "expires_at",
+    "superseded_by",
+    "tags",
+    "agent_scope",
+    "supersedes",
+    "conflicts_with",
+    "priority",
+    "confidence",
+    "metadata"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "memory_record.v1"
+    },
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "USER",
+        "PROJECT",
+        "DECISION",
+        "WORKFLOW",
+        "EPISODIC"
+      ]
+    },
+    "status": {
+      "enum": [
+        "ACTIVE",
+        "SUPERSEDED",
+        "RETIRED",
+        "EXPIRED",
+        "REJECTED"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "source_type": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "project": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "machine": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "expires_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "superseded_by": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "agent_scope": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "supersedes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "conflicts_with": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "priority": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "metadata": {
+      "type": "object"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+# Architecture
+
+Core: `core/engine.py`，标准库 deterministic 实现。CLI: `cli/__main__.py`，正式 JSON 边界。存储: `memory_store.v1` JSON 容器（records + audit），record schema 冻结为 `memory_record.v1`。JSON Schema 是接口文档，Core 用标准库显式校验输入，不引入验证依赖。
+
+写入流程：确认与敏感 Gate → 类型分类 → 范围内重复/冲突检查 → 明确动作 → record/audit 同一次原子存储写入。读取流程：ACTIVE 与 TTL → project / agent / type 过滤 → lexical relevance / priority / recency → bounded summaries。
+
+ACTIVE 是默认唯一可注入状态。机器是记录范围的一部分，用于防止不同机器上的路径互相替换；检索返回机器字段，V0.1 尚未提供机器查询参数。
+
+安全：所有候选字段整体检查；拒绝时正文不落盘，理由仅为固定代码消息。审计不包含被拒绝的原始候选。已接受正文和补充历史可能包含用户数据，必须由使用者管理本地文件权限。运行数据不进入 Git。仅接受可信调用方确认，不连接任何模型。程序不自动读取聊天、环境变量、凭据或其他 Agent 文件。
+
+持久化只支持串行写入。Adapter 不得直接编辑 storage。扩展类型、存储和 Gate 时应版本化 Contract，不在 V0.1 添加额外服务。
