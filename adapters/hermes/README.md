@@ -20,3 +20,12 @@ remember 只通过 CLI evaluate → add，其他 decision 返回调用方处理�
 ## 卸载与隔离
 
 若手动安装过 Skill，只移除你自己复制的 Skill 文件及调用配置；保留本项目和数据，直到明确决定清理。不要改动 Hermes 原生 Memory。使用独立 storage/hermes.json；不双写、不合并原生记忆。程序自身从不编辑 Hermes 文件。
+
+
+## Win10 thin Skill Router (V0.1.1)
+
+已核准宿主 v0.21.5 的用户 Skills 机制。将 `ROUTER_SKILL.md` 手动复制到 Hermes home 的 `skills/agent-memory-os-router/SKILL.md`，不覆盖已有文件。使用 `chat-memory.bat` 从正常 CLI 进入，它仅为该会话预载 Skill 并限定 terminal,skills 工具，不改 Hermes config 或原生 Memory。普通无预载聊天只能靠宿主按描述发现 Skill，不保证自动加载；推荐专用入口。
+
+Router 使用公共 CLI evaluate/add/retrieve/inject/supersede，独立数据为项目内 `storage/hermes-memory.json`。明确用户事实才确认写入，冲突须下一轮明确确认替换。模型推测不能作为用户确认。路由是 Skill 指令，不是强制 Hook；只承诺验收覆盖的用法。
+
+最小事件证据在 `storage/hermes-router-events.jsonl`，仅时间、动作、ID、decision，不保存聊天或注入正文。运行数据已被 Git 忽略。卸载时用户可移除自己安装的独立 Skill；不用删除或迁移原生 Memory。
