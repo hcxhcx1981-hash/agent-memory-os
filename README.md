@@ -14,7 +14,7 @@ Core does not require an LLM. The optional Smart Layer is deterministic too.
 ## 5-minute Quick Start
 
 Requires **Python >=3.11** and Git. No runtime dependencies or external API.
-The repository remains PRIVATE during RC preparation; clone requires existing access.
+The repository is public; runtime stores remain private and Git ignored.
 On Linux/macOS use `python3` if `python` is unavailable, or activate a venv.
 
 ```sh
@@ -137,7 +137,7 @@ on the host model following the Skill, not an enforced Hook. Native Hermes
 Memory remains separate.
 
 [Build an adapter](docs/build-an-adapter.md) provides a generic Python/CLI
-contract. No official Codex, WorkBuddy or DHAF adapter is implemented.
+contract. A read-only Codex Adapter / Inspector is included; WorkBuddy and DHAF adapters are not implemented.
 See [Architecture](docs/architecture.md), [Smart Layer](docs/smart-layer.md)
 and the frozen [record schema](schemas/memory_record.v1.json).
 
@@ -151,8 +151,7 @@ or a general reasoning guarantee. Use stable `metadata.fact_key` values for
 changeable properties. Budgets count characters rather than model tokens.
 Core CLI retrieval has fewer scope controls than optional smart retrieval.
 
-RC preparation does not promise 1.0 stability or security. The repository remains
-PRIVATE; no GitHub Release or PyPI publication is performed.
+RC preparation does not promise 1.0 stability or security. No new GitHub Release or PyPI publication is performed by this change.
 
 ## License and contributing
 
@@ -167,3 +166,12 @@ trademark permission or a warranty. See the
 [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) ·
 [Roadmap](ROADMAP.md) · [Changelog](CHANGELOG.md) ·
 [Code of conduct](CODE_OF_CONDUCT.md)
+
+
+## Independent stores and Codex Inspector
+
+Agent defaults use separate Hermes and Codex stores. Cross-agent sharing must be
+explicit. The read-only Codex Inspector retrieves project/machine/agent scoped
+context on demand; native Codex memory remains separate. Public `move` preserves
+IDs and provenance with Gate, journal recovery and RETIRED source history.
+See [Codex quick start](docs/codex-quickstart.md).

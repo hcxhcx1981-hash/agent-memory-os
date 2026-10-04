@@ -1,7 +1,7 @@
 # Build an adapter
 
-Core is agent-neutral and does not require an LLM. No official Codex,
-WorkBuddy or DHAF adapter is implemented.
+Core is agent-neutral and does not require an LLM. A read-only Codex Adapter / Inspector is included.
+WorkBuddy and DHAF adapters are not implemented.
 
 WRITE: selected candidate → evaluate → add only on ACCEPT. Add re-evaluates.
 Stop on CONFLICT/REJECT/UPDATE/DUPLICATE rather than inventing permission.
@@ -74,3 +74,12 @@ Always select the same `--store` before the command. Never edit store JSON
 directly. Log minimal IDs/decisions, not message bodies. Budget counts characters,
 not tokens. See [contract](adapter-contract.md), [lifecycle](memory-lifecycle.md),
 and [architecture](architecture.md).
+
+
+## Independent stores and Codex Inspector
+
+Agent defaults use separate Hermes and Codex stores. Cross-agent sharing must be
+explicit. The read-only Codex Inspector retrieves project/machine/agent scoped
+context on demand; native Codex memory remains separate. Public `move` preserves
+IDs and provenance with Gate, journal recovery and RETIRED source history.
+See [Codex quick start](codex-quickstart.md).

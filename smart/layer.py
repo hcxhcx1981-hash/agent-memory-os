@@ -92,8 +92,8 @@ def terms(text):
     return tokens
 
 class SmartMemory:
-    def __init__(self, store, judge=None):
-        self.core=Memory(store)
+    def __init__(self, store, judge=None, read_only=False):
+        self.core=Memory(store,read_only=read_only)
         self.path=Path(str(store)+'.smart.json')
         self.judge=judge or SemanticJudge()
     def load(self):
@@ -249,7 +249,7 @@ class SmartMemory:
             if r['status']!='ACTIVE' or self.core.expired(r):reason='inactive_or_expired'
             elif r['project'] and r['project']!=project:reason='project_scope_mismatch'
             elif r['machine'] and canonical_machine(r['machine'])!=canonical_machine(machine):reason='machine_scope_mismatch'
-            elif r['agent_scope'] and agent not in r['agent_scope']:reason='agent_scope_mismatch'
+            elif r['agent_scope'] and agent not in r['agent_scope'] and 'global' not in r['agent_scope']:reason='agent_scope_mismatch'
             elif kind and r['type']!=kind:reason='memory_type_mismatch'
             elif any(x['target_id']==r['id'] and not self.relationship_valid(x) for x in relations):reason='derived_source_changed'
             hay=terms(r['content']+' '+r['title']+' '+' '.join(r['tags']))

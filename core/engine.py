@@ -19,12 +19,20 @@ def fact_key(c):
     return match.group(1).casefold() if match else None
 
 class Memory:
-    def __init__(self, path):
+    def __init__(self, path, read_only=False):
         self.path=Path(path)
+        self.read_only=read_only
     def load(self):
+        from core.migration import recover, marker
+        if self.read_only and marker(self.path.resolve()).exists():
+            raise ValueError("Pending migration; read-only access refused")
+        if not self.read_only:
+            recover(self.path)
         if not self.path.exists(): return {'schema_version':'memory_store.v1','records':[], 'audit':[]}
         return json.loads(self.path.read_text(encoding='utf-8'))
     def save(self, data):
+        if self.read_only:
+            raise ValueError("Read-only store cannot write")
         self.path.parent.mkdir(parents=True,exist_ok=True)
         temp=self.path.with_suffix('.tmp')
         temp.write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf-8')
@@ -131,7 +139,7 @@ class Memory:
         for r in self.load()['records']:
             if r['status']!='ACTIVE' or self.expired(r): continue
             if r['project'] is not None and r['project']!=project: continue
-            if r['agent_scope'] and agent not in r['agent_scope']: continue
+            if r['agent_scope'] and agent not in r['agent_scope'] and 'global' not in r['agent_scope']: continue
             if kind and r['type']!=kind: continue
             hay=(r['title']+' '+r['content']+' '+' '.join(r['tags'])).casefold()
             relevance=sum(w in hay for w in words)

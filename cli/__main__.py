@@ -6,6 +6,7 @@ def main():
     if hasattr(sys.stderr, "reconfigure"): sys.stderr.reconfigure(encoding="utf-8")
     p=argparse.ArgumentParser(description='Agent Memory OS (optional smart layer)')
     p.add_argument('--store',default='storage/memory.json')
+    p.add_argument('--read-only',action='store_true',help='Refuse writes and pending-migration recovery')
     sub=p.add_subparsers(dest='command',required=True)
     for name in ('add','evaluate'):
         s=sub.add_parser(name);s.add_argument('--candidate',required=True,help='UTF-8 JSON file')
@@ -27,11 +28,17 @@ def main():
     s=sub.add_parser('explain');s.add_argument('id')
     for name in ('why','smart-retrieve','smart-inject'):
         s=sub.add_parser(name);s.add_argument('task');s.add_argument('--project');s.add_argument('--agent');s.add_argument('--machine');s.add_argument('--type',dest='kind');s.add_argument('--budget',type=int,default=1000)
-    a=p.parse_args();m=Memory(a.store)
+    s=sub.add_parser('move');s.add_argument('--id',required=True);s.add_argument('--from',dest='source',required=True);s.add_argument('--to',dest='target',required=True);s.add_argument('--agent-scope',nargs='+');s.add_argument('--source-agent')
+    a=p.parse_args();m=Memory(a.store,read_only=a.read_only)
     try:
-        if a.command in ('judge','observe','promotion-candidates','promote','consolidate','explain','why','smart-retrieve','smart-inject'):
+        if a.read_only and a.command not in ('search','retrieve','inject','smart-retrieve','smart-inject','why','explain','get','export','conflicts'):
+            raise ValueError('Read-only command required')
+        if a.command=='move':
+            from core.migration import move_record
+            result=move_record(a.source,a.target,a.id,a.agent_scope,a.source_agent)
+        elif a.command in ('judge','observe','promotion-candidates','promote','consolidate','explain','why','smart-retrieve','smart-inject'):
             from smart.layer import SmartMemory
-            layer=SmartMemory(a.store)
+            layer=SmartMemory(a.store,read_only=a.read_only)
             if a.command in ('judge','observe'):
                 with open(a.candidate,encoding='utf-8-sig') as f:c=json.load(f)
                 result=layer.judge.judge(c) if a.command=='judge' else layer.observe(c,a.user_confirmed)

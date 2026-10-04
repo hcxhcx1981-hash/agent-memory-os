@@ -26,3 +26,12 @@ Adapters provide the confirmation boundary and choose when the current task need
 history. They may use the [public contract](build-an-adapter.md), but must not edit
 the store directly. The [Hermes Skill Router](hermes-quickstart.md) is a model-mediated
 reference integration, not a Core dependency or mandatory host Hook.
+
+
+## Independent stores and Codex Inspector
+
+Agent defaults use separate Hermes and Codex stores. Cross-agent sharing must be
+explicit. The read-only Codex Inspector retrieves project/machine/agent scoped
+context on demand; native Codex memory remains separate. Public `move` preserves
+IDs and provenance with Gate, journal recovery and RETIRED source history.
+See [Codex quick start](codex-quickstart.md).
