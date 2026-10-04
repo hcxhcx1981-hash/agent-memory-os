@@ -61,6 +61,11 @@ class SmartTests(unittest.TestCase):
         self.m.retire(r['record']['id'],'Obsolete')
         self.assertEqual(self.s.explain(r['observation_id'])['status'],'RETIRED')
         self.assertEqual(SemanticJudge().judge(c('以后都用深色UI',metadata=[]))['risk_flags'],['invalid'])
+    def test_trusted_explicit_intent_survives_factual_text_extraction(self):
+        result=self.s.observe(c('Project-Aurora UI 使用深色背景。',project='Project-Aurora',confirmed=True),True)
+        self.assertEqual(result['decision'],'ACCEPT')
+        self.assertEqual(result['record']['content'],'Project-Aurora UI 使用深色背景。')
+        self.assertEqual(self.s.observe(c('Project-Aurora UI 可能使用深色背景。',project='Project-Aurora',confirmed=True),True)['decision'],'REJECT')
     def test_optional_judge_cannot_override_safety(self):
         class UnsafeJudge:
             def judge(self,candidate):
@@ -114,6 +119,18 @@ class SmartTests(unittest.TestCase):
         self.m.add(c('用户喜欢深色 UI 和大字体',confirmed=True,type='USER',metadata={'supplements':a['id']}))
         with self.assertRaises(ValueError):self.s.promote(pending['observation_id'],True)
         self.assertNotIn(accepted['id'],self.s.inject('UI 配色')['memory_ids'])
+    def test_primary_color_change_and_conflicting_sources_blocked(self):
+        purple=self.add('Project-Aurora UI 紫色为主交互色',project='Project-Aurora',type='PROJECT')
+        result=self.s.observe(c('Project-Aurora UI 主交互色改为蓝色',project='Project-Aurora',confirmed=True),True)
+        self.assertEqual(result['decision'],'CONFLICT')
+        self.assertIn(purple['id'],result['conflicts_with'])
+        # Reproduce legacy data produced by the pre-fix host: two ACTIVE color assertions.
+        blue=copy.deepcopy(purple);blue['id']='synthetic-blue-fixture';blue['content']='Project-Aurora UI 主交互色改为蓝色'
+        d=self.m.load();d['records'].append(blue);self.m.save(d)
+        with self.assertRaisesRegex(ValueError,'consolidation blocked'):self.s.consolidate([purple['id'],blue['id']])
+        r=subprocess.run([sys.executable,'-m','cli','--store',str(self.path),'consolidate',purple['id'],blue['id']],cwd=ROOT,capture_output=True,encoding='utf-8')
+        self.assertEqual(r.returncode,2);response=json.loads(r.stdout)
+        self.assertEqual(response['decision'],'BLOCKED');self.assertIn('primary-interaction color',response['error'])
     def test_scope_weighted_retrieval_and_why(self):
         a=self.add('Memory OS Hermes Adapter 修复规则',type='WORKFLOW',project='X',machine='Win10',agent_scope=['hermes'],priority=90)
         b=self.add('Memory OS Hermes Adapter 修复路径',project='X',machine='Win11')

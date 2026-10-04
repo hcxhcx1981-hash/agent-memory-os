@@ -38,7 +38,7 @@ class SemanticJudge:
         if len(text)>2000 or re.search(r'(^|\n)(user|assistant|system)\s*:|Traceback|DEBUG\s',text,re.I):
             result.update(reason='Unfiltered chat/log',risk_flags=['raw_input']);return result
         temporary=bool(re.search(r'今天|暂时|这次|today|temporary|this time',text,re.I))
-        durable=bool(re.search(r'以后|长期|一直|总是|每次|默认|forever|always|default|from now',text,re.I))
+        durable=bool(re.search(r'以后|长期|一直|总是|每次|默认|forever|always|default|from now',text,re.I)) or (c.get('metadata',{}).get('trusted_explicit_intent') is True and c.get('confirmed') is True and c.get('source_type','user')=='user')
         preference=bool(re.search(r'喜欢|偏好|不喜欢|只用于|prefer|like|avoid',text,re.I))
         alias=re.search(r'(?:以后\s*)?([A-Za-z][\w-]*)\s*(?:就是|代表|means)\s*(.+)',text,re.I)
         project_fact=bool(re.search(r'[A-Za-z]:[\\/]|项目路径|项目.*架构|project.*path|版本|version',text,re.I))
@@ -65,7 +65,14 @@ def revision(record):
 def canonical_machine(value):
     return re.sub(r'[\s_-]+','',value.casefold()).replace('windows','win') if value else None
 
+def primary_interaction_color(text):
+    text=normalized(text)
+    match=re.search(r'(紫色|蓝色|绿色|红色|橙色|黄色)(?:为|是|作为)主交互色|主交互色(?:改为|为|是|[:=：])(紫色|蓝色|绿色|红色|橙色|黄色)',text)
+    return next((value for value in match.groups() if value),None) if match else None
+
 def direct_contradiction(a,b):
+    color_a,color_b=primary_interaction_color(a),primary_interaction_color(b)
+    if color_a and color_b and color_a!=color_b:return True
     def affirmative(text):
         text=re.sub(r'不(?=喜欢|偏好|允许)|not ', '',text,flags=re.I)
         return re.sub(r'dislike','like',text,flags=re.I)
@@ -115,12 +122,17 @@ class SmartMemory:
         return verdict
     def observe(self,c,explicit=False):
         # Always apply deterministic safety even when an optional judge is supplied.
-        baseline=SemanticJudge().judge(c)
+        judge_input=copy.deepcopy(c)
+        if isinstance(judge_input,dict) and isinstance(judge_input.get('metadata',{}),dict):
+            metadata=judge_input.setdefault('metadata',{})
+            metadata.pop('trusted_explicit_intent',None)
+            if explicit is True and c.get('confirmed') is True and c.get('source_type','user')=='user':metadata['trusted_explicit_intent']=True
+        baseline=SemanticJudge().judge(judge_input)
         if baseline['risk_flags'] or not baseline['should_remember']:
             return self.reject(baseline['reason'])
         if not isinstance(c,dict):return self.reject('Invalid candidate')
         if c.get('source_type','user') not in ('user','import','system'):return self.reject('Untrusted source')
-        j=self.judge.judge(c)
+        j=self.judge.judge(judge_input)
         # Optional judge cannot lift deterministic safety, confirmation, or stability limits.
         for k in ('stability_score','future_value_score','confidence'):
             if not isinstance(j.get(k),(int,float)) or not math.isfinite(j[k]) or not 0<=j[k]<=1:return self.reject('Invalid judge score')
@@ -213,7 +225,7 @@ class SmartMemory:
         # Reject known contradictory clauses; unknown semantics remain subject to human review.
         for a in records:
             for b in records:
-                if a['id']!=b['id'] and direct_contradiction(a['content'],b['content']):raise ValueError('Direct negation or opposite-state conflict')
+                if a['id']!=b['id'] and direct_contradiction(a['content'],b['content']):raise ValueError('Conflicting primary-interaction color or negation; consolidation blocked')
         return records
     def consolidate(self,ids):
         records=self.validate_sources(ids);first=records[0]

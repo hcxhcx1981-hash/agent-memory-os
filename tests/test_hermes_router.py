@@ -49,5 +49,7 @@ class RouterTests(unittest.TestCase):
                 p=subprocess.run([sys.executable,str(root/'adapters/hermes/router.py'),'observe','--text','用户偏好黑紫配色','--store',str(store),'--trace',str(trace)],cwd=root,capture_output=True,encoding='utf-8')
                 self.assertEqual(p.returncode,0,p.stderr);r=json.loads(p.stdout)
                 self.assertEqual(r['MEMORY_DECISION'],'OBSERVED')
+                self.assertIn('MEMORY_REASON',r)
+                self.assertEqual(r['PROMOTION_EVIDENCE']['repeat_count'],index+1)
                 self.assertEqual(r['PROMOTION_RECOMMENDED'],index==2)
             self.assertEqual(Memory(store).load()['records'],[])

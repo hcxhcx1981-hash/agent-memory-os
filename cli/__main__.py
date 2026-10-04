@@ -56,5 +56,10 @@ def main():
                 print('\n\n'.join(f"## {r['title']} ({r['status']})\n{r['content']}" for r in result['records']));return
         print(json.dumps(result,ensure_ascii=False,indent=2))
     except (ValueError,KeyError,StopIteration,OSError,TypeError) as e:
-        print(json.dumps({'error':'Invalid operation or candidate; check schema and record ID'}));sys.exit(2)
+        safe_reasons={'Conflicting primary-interaction color or negation; consolidation blocked','Conflicting fact keys cannot consolidate','Sources must be live ACTIVE','Incompatible scopes or types','Unresolved source conflict','Need distinct source IDs','Sources changed after proposal; review a new candidate'}
+        if str(e) in safe_reasons:
+            print(json.dumps({'decision':'BLOCKED','error':str(e)}))
+        else:
+            print(json.dumps({'error':'Invalid operation or candidate; check schema and record ID'}))
+        sys.exit(2)
 if __name__=='__main__': main()

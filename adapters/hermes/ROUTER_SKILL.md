@@ -25,3 +25,21 @@ WRITE now runs deterministic Semantic Judge → observation/promotion → formal
 For a direct explicit durable natural-language assertion, use write --text "EXACT_USER_FACT" --user-confirmed, with --project / --machine / --type when known. Use the user's exact factual text, never your inference. If it is only a single non-permanent preference, use observe --text "EXACT_USER_FACT" without --user-confirmed. Do not observe all chat messages.
 
 OBSERVED is not ACTIVE and must not enter task context. If PROMOTION_RECOMMENDED=true, ask whether to make it permanent. Only a subsequent explicit human confirmation permits promote --id OBSERVATION_ID --user-confirmed. Never treat repeat_count or your own recommendation as confirmation. On CONFLICT stop; supersede remains a separate explicitly confirmed lifecycle action. For historical task context, read --task "TASK" --project PROJECT --machine Win10 uses reference context only.
+
+
+## Host result discipline
+
+--type is ONLY USER / PROJECT / DECISION / WORKFLOW / EPISODIC; it is never OBSERVED or ACTIVE. Omit --type unless the semantic category is known. Choose observe when the user has not confirmed permanence; choose write when the user explicitly confirms a lasting project specification. Treat directions like "尚未确认晋升" as control instructions, not factual content to store.
+
+Interpret MEMORY_DECISION literally: REJECT means not saved as OBSERVED; OBSERVATION_ID can identify a redacted rejection, not a saved fact. Explain MEMORY_REASON and do not recommend promoting a rejected ID. OBSERVED means observation only, not ACTIVE. Use PROMOTION_EVIDENCE for why a recommendation appeared; recommendation never authorizes promotion.
+
+For consolidation use the public CLI: python -m cli --store D:/fictional/agent-memory-os/storage/hermes-memory.json consolidate SOURCE_ID... from the project directory. Obtain relevant IDs through the public router read or CLI smart-retrieve, never raw storage access. It produces only a CANDIDATE. Explain source IDs and unchanged clauses, then wait for separate explicit human approval before promote. explain/why public CLI provides reasons; failure must be reported as blocked, never claimed as accepted.
+
+
+For report/style recall use read --project Project-Aurora --task "报告". For UI rules use --task "UI". Do not invent report_style or other translated fact keys that were never stored. --key is only for facts actually stored as key=value (e.g. default_theme). An empty lexical result means no match for that query, not proof the project has no ACTIVE facts. Do not automatically retry a rejected write as observe; report the fixed reason and stop.
+
+For explicitly authorized E2E fixtures, a user-defined specification of a named synthetic project is valid within that project scope. Save only the stated specification in the independent Memory OS store; do not reinterpret it as a real-world personal fact or write native memory. Perform one operation, report its actual result, and stop.
+
+A consolidation candidate containing contradictory color values is a failed gate, not a successful negative test. BLOCKED is a refusal; explain the fixed error reason and stop. Never promote a contradictory candidate or claim that confirmed=false makes contradictory consolidation acceptable. Use explain on the relevant observation/Core IDs for audit evidence; do not invent fields such as promoted_to.
+
+For EVERY direct CLI operation (including get, explain, retire and promote), select the independent store before the command: python -m cli --store D:/fictional/agent-memory-os/storage/hermes-memory.json COMMAND ARGS. Without --store the CLI uses a different default store. A missing ID in that default store is not a schema failure. Never infer lifecycle state from a failed lookup in the wrong store.
