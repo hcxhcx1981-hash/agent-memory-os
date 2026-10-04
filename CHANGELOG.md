@@ -1,11 +1,15 @@
 # Changelog
 
-## RC preparation (version unchanged pending acceptance)
+## 0.9.0-rc1
 
 Release security history review and offline checker; Apache-2.0 LICENSE/NOTICE
 and dependency review; portable installation and Hermes/generic adapter guides;
 fictional executable Quick Start/demo; offline Python 3.11–3.14 CI; isolated
 packaging checks. No new Core capability or schema changes. No publication.
+
+Package metadata uses the PEP 440 spelling `0.9.0rc1`. Version advanced only
+after preflight clean-clone installation, offline demos, 32 tests and all six
+CI jobs passed. Repository remains PRIVATE.
 
 ## 0.2.0
 

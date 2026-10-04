@@ -4,6 +4,8 @@ A model-agnostic memory governance layer for AI agents.
 
 **Remember less. Remember better.**
 
+Current candidate: **0.9.0-rc1** (`0.9.0rc1` in Python package metadata).
+
 Keep selected, confirmed facts instead of feeding complete chat histories back
 into an agent. The Gate checks what may be saved; lifecycle actions preserve
 changes and audit; retrieval returns scoped ACTIVE facts under a character budget.
