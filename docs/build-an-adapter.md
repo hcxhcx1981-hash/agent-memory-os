@@ -88,3 +88,10 @@ Native Memory non-interference means no Adapter access to native data or rules;
 it does not require a running Codex host database to remain unchanged. See
 [codex-quickstart.md](codex-quickstart.md#native-memory-non-interference-acceptance)
 for isolated fingerprints, subprocess access auditing and host attribution limits.
+
+## Agnes Code
+
+The [Agnes Code thin router](../adapters/agnes-code/README.md) reproduces the
+validated public CLI evaluate/add, retrieve/inject and explicit supersede chain.
+Use a separate agnes-code store and trusted user confirmation. No host Core or
+Native Memory integration is installed automatically.

@@ -4,8 +4,7 @@ Use Git and **Python >=3.11** from existing installations or approved installers
 [Python downloads](https://www.python.org/downloads/) and
 [Git downloads](https://git-scm.com/downloads). On Windows choose per-user Python
 installation and enable its PATH option. No winget, Homebrew, administrator
-privilege or global package write access is assumed. Clone currently requires
-PRIVATE repository access; never paste credentials into clone URLs.
+privilege or global package write access is assumed. The repository is public; never paste credentials into clone URLs.
 
 ## Windows PowerShell
 
@@ -91,3 +90,8 @@ matching sidecar and router event file after checking each filename. Also remove
 backups and demo stores if desired. Do not delete native Hermes Memory,
 unrelated Skills or unrelated directories. This guide does not perform deletion
 or promise secure disk erasure.
+
+Agnes Code uses its own Memory OS store and an optional on-demand Skill. See
+[Agnes Code quick start](agnes-code-quickstart.md). An absent or empty `{}` store
+initializes on first accepted write; invalid JSON and non-array records/audit
+fail without overwriting the file.

@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.9.0-rc2
+
+Agnes Code thin public-CLI adapter and on-demand Skill with an independent store,
+trusted confirmation, conflict stop and explicit supersede. Supersede creates
+the new ACTIVE record itself; no follow-up add. Empty and partial stores normalize
+on load; malformed JSON, wrong array types and unknown schemas fail without
+overwriting the source. Includes isolated Hermes/Codex stores and the read-only
+Codex Inspector delivered since rc1. Schema remains unchanged.
+
+59 tests cover all previous 44 regressions plus empty-store and Agnes Code cases.
+Win10 Agnes Code desktop cross-session recall/conflict/confirmed replacement was
+confirmed by the user; CLI regressions and fresh-checkout installation are
+checked separately. Package spelling: 0.9.0rc2. GitHub Pre-release only; no PyPI.
+
 ## 0.9.0-rc1
 
 Release security history review and offline checker; Apache-2.0 LICENSE/NOTICE

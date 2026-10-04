@@ -29,7 +29,17 @@ class Memory:
         if not self.read_only:
             recover(self.path)
         if not self.path.exists(): return {'schema_version':'memory_store.v1','records':[], 'audit':[]}
-        return json.loads(self.path.read_text(encoding='utf-8'))
+        data = json.loads(self.path.read_text(encoding='utf-8'))
+        if not isinstance(data, dict):
+            raise ValueError('Store must be an object')
+        data.setdefault('schema_version', 'memory_store.v1')
+        if data['schema_version'] != 'memory_store.v1':
+            raise ValueError('Unsupported store schema_version')
+        for field in ('records', 'audit'):
+            data.setdefault(field, [])
+            if not isinstance(data[field], list):
+                raise ValueError('Store ' + field + ' must be a list')
+        return data
     def save(self, data):
         if self.read_only:
             raise ValueError("Read-only store cannot write")

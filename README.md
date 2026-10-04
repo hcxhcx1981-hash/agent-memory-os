@@ -4,7 +4,7 @@ A model-agnostic memory governance layer for AI agents.
 
 **Remember less. Remember better.**
 
-Current candidate: **0.9.0-rc1** (`0.9.0rc1` in Python package metadata).
+Current candidate: **0.9.0-rc2** (`0.9.0rc2` in Python package metadata).
 
 Keep selected, confirmed facts instead of feeding complete chat histories back
 into an agent. The Gate checks what may be saved; lifecycle actions preserve
@@ -175,3 +175,8 @@ explicit. The read-only Codex Inspector retrieves project/machine/agent scoped
 context on demand; native Codex memory remains separate. Public `move` preserves
 IDs and provenance with Gate, journal recovery and RETIRED source history.
 See [Codex quick start](docs/codex-quickstart.md).
+
+Agnes Code has an independent, on-demand thin CLI router. See
+[Agnes Code quick start](docs/agnes-code-quickstart.md). Empty `{}` and partial
+empty stores normalize on load; malformed JSON and wrong array types are errors
+and are never silently overwritten.
