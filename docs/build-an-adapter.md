@@ -83,3 +83,8 @@ explicit. The read-only Codex Inspector retrieves project/machine/agent scoped
 context on demand; native Codex memory remains separate. Public `move` preserves
 IDs and provenance with Gate, journal recovery and RETIRED source history.
 See [Codex quick start](codex-quickstart.md).
+
+Native Memory non-interference means no Adapter access to native data or rules;
+it does not require a running Codex host database to remain unchanged. See
+[codex-quickstart.md](codex-quickstart.md#native-memory-non-interference-acceptance)
+for isolated fingerprints, subprocess access auditing and host attribution limits.

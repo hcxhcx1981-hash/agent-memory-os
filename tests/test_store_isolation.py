@@ -1,6 +1,8 @@
 import copy
 import json
 import tempfile
+import subprocess
+import sys
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -126,3 +128,33 @@ class StoreIsolationTests(unittest.TestCase):
         with self.assertRaises(ValueError):CodexAdapter(ROOT,Path(self.temp.name)/'native.SQLITE')
         with self.assertRaises(ValueError):self.adapter.call('export')
         with self.assertRaises(ValueError):self.adapter.call('add')
+
+        # Non-interference measures Adapter/CLI access, not a running host's DB quiescence.
+        self.move()
+        bootstrap = """
+import sys, runpy, json, os
+opened=[]
+def audit(event,args):
+    if event.startswith('sqlite3.'):
+        raise AssertionError('SQLite access forbidden')
+    if event=='open' and isinstance(args[0],(str,bytes)):
+        path=os.fsdecode(args[0]);opened.append(path)
+        if '.codex' in path.replace(chr(92),'/').casefold().split('/'):
+            raise AssertionError('Native Codex access forbidden')
+sys.addaudithook(audit)
+sys.argv=['cli',*sys.argv[1:]]
+try: runpy.run_module('cli',run_name='__main__')
+finally: print(json.dumps(opened),file=sys.stderr)
+"""
+        original=subprocess.run
+        traces=[]
+        def traced(command,**kwargs):
+            self.assertEqual(command[:5],[sys.executable,'-B','-m','cli','--read-only'])
+            result=original([sys.executable,'-B','-c',bootstrap,*command[4:]],**kwargs)
+            traces.extend(json.loads(result.stderr))
+            return result
+        with patch('adapters.codex.adapter.subprocess.run',traced):
+            for operation in ('retrieve','smart-retrieve','inject','why','explain'):
+                self.adapter.inspect('log','Project-Orion','Win10-Admin',operation,record_id=self.r['id'])
+        data_paths={Path(name).resolve() for name in traces if str(name).endswith('.json')}
+        self.assertEqual(data_paths,{self.target.path.resolve()})

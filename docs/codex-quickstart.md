@@ -56,3 +56,28 @@ prior transcript and ask it to run Inspector for the named project and machine.
 Verify its response uses the returned fact; separately verify an arithmetic task
 makes no Inspector call. Host-owned normal persistence is distinct from any
 adapter write: this adapter has no native-memory write capability.
+
+
+## Native Memory non-interference acceptance
+
+Non-interference means the Adapter and Inspector do not access Native Memory.
+It does not promise that a running Codex host keeps its own database stationary.
+The Adapter's Python CLI subprocess is part of the audited boundary. Runtime
+code, imports and Python libraries are expected file accesses; memory data reads
+are limited to the selected Codex store and its optional `.smart.json` sidecar.
+The default store is `storage/codex-memory.json`; Hermes data is excluded.
+
+Acceptance requires source review for native SQLite connections, native summary
+writes, config/AGENTS/rules edits and native-memory write APIs, plus Adapter-only
+verification without launching a Codex host. Hash the native DB/WAL/SHM and
+Memory Markdown before and after that isolated run; they must remain unchanged.
+A separately running host can confound fingerprints: report that observation,
+use process/file-access evidence, and never stop or change the host to force a pass.
+The regression test audits Python file opens and rejects SQLite/native-directory
+access in the Adapter's CLI subprocess for all five read operations.
+
+For fresh-host E2E, Inspector supplies only bounded scoped context. Normal native
+persistence by `codex.exe` is allowed. Attribute file access to the responsible
+process rather than inferring an Adapter write from a changed file hash. Python
+audit events cover this Python call chain; they are not a system-wide OS trace.
+A current handle-owner snapshot cannot retrospectively identify every writer.
