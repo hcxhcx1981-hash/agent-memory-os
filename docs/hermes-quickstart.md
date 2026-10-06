@@ -6,6 +6,12 @@ Historical independent-session evidence:
 [promotion/consolidation](hermes-promotion-consolidation-e2e.md).
 This verifies that host version, not all versions or models.
 
+Local compatibility acceptance also passed on Windows host
+`0.21.5+7249.g7157422`, using its restored default `agnes / agnes-3.0-flash`.
+A fresh dedicated `chat -s agent-memory-os-router -t terminal,skills` session
+returned the fictional Project-H-Orion convention through a real terminal Router
+result, with reference-only context and the expected ID; the prompt had no answer.
+
 The reference adapter uses a **dedicated Skill Router** calling the public CLI.
 Core JSON, optional Smart sidecar and diagnostics are independent of Hermes
 native Memory. There is no migration or native file edit. Routing relies on
@@ -53,6 +59,14 @@ hermes chat -s agent-memory-os-router -t terminal,skills
 Windows can also run `adapters/hermes/chat-memory.bat` when `hermes` is on PATH.
 This dedicated tool list excludes native memory. Other normal entrypoints may
 use native Memory separately; do not save these same facts through both systems.
+
+Router `read` requires explicit project and machine. Read calls use public CLI
+`--read-only`; only explicitly hermes/global scoped records are injected. Native
+paths, other agents' stores, aliases and pending migration recovery are refused.
+Arithmetic bypasses retrieval and diagnostics. Router writes set hermes scope and
+source provenance. Existing unscoped records are not automatically migrated.
+Read diagnostics may append to the independent trace but do not modify the store.
+Python Router/CLI access audits cover this boundary, not host-owned persistence.
 
 Default store: `<AGENT_MEMORY_OS_ROOT>/storage/hermes-memory.json`.
 Sidecar: `hermes-memory.json.smart.json`; trace:
